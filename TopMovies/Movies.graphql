@@ -1,0 +1,132 @@
+query Movies($firstNumberOfMovies: Int!,$endCursor: String) {
+  movies{
+    popular(first: $firstNumberOfMovies, after: $endCursor){
+    pageInfo{
+      hasNextPage
+      endCursor
+      startCursor
+    }
+    totalCount
+      edges{
+        node{
+          id
+          title
+          overview
+          rating
+          releaseDate
+          details{
+            imdbID
+            homepage
+            runtime
+            budget
+            similar(first: 10){
+                edges{
+                  node{
+                    details{
+                      imdbID
+                    }
+                    
+                  }
+                }
+              
+            }
+            genres{
+              name
+            }
+          }
+          poster(size:W780)
+          images{
+              posters{
+              image(size:W780)
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query findByImdbID($ImdbId: String!){
+  find(externalId:$ImdbId,source: Imdb){
+    movies{
+            id
+           title
+          overview
+          rating
+          releaseDate
+          details{
+            imdbID
+            homepage
+            runtime
+            budget
+            similar(first: 10){
+                edges{
+                  node{
+                    details{
+                      imdbID
+                    }
+                    
+                  }
+                }
+              
+            }
+            genres{
+              name
+            }
+          }
+          poster(size:W780)
+          images{
+              posters{
+              image(size:W780)
+            }
+          }
+    }
+  }
+}
+
+
+query topRatedMovies($firstNumberOfMovies: Int!,$endCursor: String){
+  movies {
+    topRated(first: $firstNumberOfMovies, after: $endCursor){
+    pageInfo{
+      hasNextPage
+      endCursor
+      startCursor
+    }
+    totalCount
+      edges {
+        node {
+           id
+          title
+          overview
+          rating
+          releaseDate
+          details{
+            imdbID
+            homepage
+            runtime
+            budget
+            similar(first: 10){
+                edges{
+                  node{
+                    details{
+                      imdbID
+                    }
+                  }
+                }
+            }
+            genres{
+              name
+            }
+          }
+          poster(size:W780)
+          images{
+              posters{
+              image(size:W780)
+            }
+          }
+        }
+      }
+    }
+  }
+}
