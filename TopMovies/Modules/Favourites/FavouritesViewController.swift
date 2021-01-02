@@ -34,7 +34,9 @@ class FavouritesViewController: BaseWireframe<FavouritesViewModel>,UITableViewDe
             
             detailsViewModel.onDismiss.asObserver().subscribe(onNext: { (loaded) in
                 DispatchQueue.main.async {
+                    self.viewModel.getFavouriteMoviesId()
                     self.viewModel.reloadTableView.onNext(true)
+                    
                 }
                 
             }).disposed(by: self.disposeBag)

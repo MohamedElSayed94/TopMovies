@@ -42,11 +42,9 @@ class HomeViewModel: BaseViewModel{
             switch result{
             case .success(let data):
                 // Serialize the response as JSON
-                
                 do{
                     let json = data.data?.movies.popular.jsonObject
                     let serialized = try JSONSerialization.data(withJSONObject: json!, options: [])
-                    
                     let modelDecoded = try JSONDecoder().decode(Movie.self, from: serialized)
                     self?.popularItemsTotalCount = modelDecoded.totalCount
                     self?.popularEndCursor = modelDecoded.pageInfo.endCursor
@@ -57,13 +55,10 @@ class HomeViewModel: BaseViewModel{
                     
                     self?.popularMovieList += edges
                     self?.popularMoviesArray.accept(self!.popularMovieList)
-                    
                 }catch{
                     
                     print("error in getting PopularMovies Data")
                 }
-                
-                
                 LoadingIndicator.stop()
                 self?.networkDispatchGroup.leave()
             case .failure(let error):
@@ -71,64 +66,49 @@ class HomeViewModel: BaseViewModel{
                 LoadingIndicator.stop()
                 self?.networkDispatchGroup.leave()
                 self?.displayError.onNext("Server Error")
-                
             }
         }
-        
     }
+    
     func getTopRatedMovies(){
         networkDispatchGroup.enter()
-        
         Network.shared.apollo.fetch(query: TopRatedMoviesQuery(firstNumberOfMovies: 15, endCursor: topRatedEndCursor)) { [weak self] result in
             switch result{
             case .success(let data):
                 // Serialize the response as JSON
-                
                 do{
                     guard let json = data.data?.movies.topRated.jsonObject else {return}
                     let serialized = try JSONSerialization.data(withJSONObject: json, options: [])
-                    
                     let modelDecoded = try JSONDecoder().decode(Movie.self, from: serialized)
-                    
                     self?.topRatedItemsTotalCount = modelDecoded.totalCount
                     self?.topRatedEndCursor = modelDecoded.pageInfo.endCursor
                     self?.topRatedHasNext = modelDecoded.pageInfo.hasNextPage
                     print(self?.topRatedEndCursor)
                     guard var edges = modelDecoded.edges else{ self?.getTopRatedMovies(); return}
                     edges.removeAll(where: { $0.node == nil })
-                    
                     self?.topRatedMovieList += edges
                     self?.topRatedMoviesArray.accept(self!.popularMovieList)
-                    
                 }catch{
                     print("error in getting TopRatedMovies Data")
                 }
                 LoadingIndicator.stop()
                 self?.networkDispatchGroup.leave()
-                
             case .failure(let error):
                 print(error)
                 self?.networkDispatchGroup.leave()
-                
                 self?.displayError.onNext("Server Error")
-                
-                
             }
         }
-        
     }
-    
     
     func didSelectItemAtIndexPath(_ indexPath: IndexPath){
         if let model = popularMovieList[indexPath.row].node{
             navigateToMovieDetails.onNext(model)
         }
-        
     }
     
     
     func getYearFromDate(stringDate: String) -> Int{
-        
         var age: Int? {
             let dateFormater = DateFormatter()
             dateFormater.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -160,8 +140,8 @@ class HomeViewModel: BaseViewModel{
         }
         reloadPopular.onNext(true)
         reloadTopRated.onNext(true)
-        
     }
+    
     func handleFavouriteTopRatedButton(index: Int){
         let id = topRatedMovieList[index].node?.details.imdbID ?? ""
         if (isFavoured(id: id)){
