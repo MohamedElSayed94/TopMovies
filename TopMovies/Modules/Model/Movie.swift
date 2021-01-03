@@ -76,10 +76,20 @@ struct Posters:Decodable {
 
 
 //Realm Model
-class favouriteRealmModel: Object {
+class favouriteRealmModel: Object, RealmClasses {
+    
+    @objc dynamic var id = ""
+    
+    override class func primaryKey() -> String? {
+        return "id"
+    }
+    
+}
+class testFavouriteRealmModel: Object, RealmClasses {
     @objc dynamic var id = ""
     
     override class func primaryKey() -> String {
         return "id"
     }
+    
 }

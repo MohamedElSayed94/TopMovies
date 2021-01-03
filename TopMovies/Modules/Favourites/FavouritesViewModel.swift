@@ -28,17 +28,18 @@ class FavouritesViewModel: BaseViewModel{
     func handleFavouriteButton(index: Int){
         guard  index < favouriteMovieList.count else {return}
         let id = favouriteMovieList[index].details.imdbID ?? ""
-        if (isFavoured(id: id)){
-            deleteFavourite(id: id)
+        if (realmManager.isFavoured(id: id)){
+            realmManager.deleteFavourite(id: id)
         }else{
-            addFavourite(id: id)
+            realmManager.addFavourite(id: id)
         }
         
         getFavouriteMoviesId()
         self.reloadTableView.onNext(true)
     }
     func getFavouriteMoviesId(){
-        favouriteIdsArr = getFavouriteFromRealm()
+        favouriteIdsArr = realmManager.getFavouriteFromRealm()
+        
         favouriteMovieList.removeAll()
         favouriteMoviesArray.accept([])
         favouriteIdsArr.forEach { (id) in

@@ -101,7 +101,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.posterImage.kf.indicatorType = .activity
         cell.posterImage.kf.setImage(with: url,placeholder: UIImage(named: "clapboard"))
         cell.movieSubTitle.text = self.viewModel.handleSubTitle(modelNode: node)
-        cell.heartImageView.image = (self.viewModel.isFavoured(id: node?.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
+        cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: node?.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
         cell.likedButton.tag = indexPath.row
         cell.likedButton.addTarget(self, action: #selector(self.handleFavouriteTopRatedButton(sender:)), for: .allEvents)
         if indexPath.row == self.viewModel.topRatedMovieList.count - 1 { // last cell

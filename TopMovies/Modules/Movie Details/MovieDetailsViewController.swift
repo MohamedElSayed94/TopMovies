@@ -81,7 +81,7 @@ class MovieDetailsViewController: BaseWireframe<MovieDetailsViewModel> {
         subTitleLabel.text = HomeViewModel().handleSubTitle(modelNode: model)
         overViewLabel.text = model.overview
         
-        likeButton.setImage((self.viewModel.isFavoured(id: model.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart"), for: .normal)
+        likeButton.setImage((self.viewModel.realmManager.isFavoured(id: model.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart"), for: .normal)
         
         likeButton.addTarget(self, action: #selector(self.handleDetailsFavouriteButton), for: .allEvents)
         
@@ -137,7 +137,7 @@ extension MovieDetailsViewController: UICollectionViewDelegate, UICollectionView
             cell.movieTitle.text = viewModel.similarMovieList[indexPath.row].title
             cell.movieSubTitle.text = HomeViewModel().handleSubTitle(modelNode: viewModel.similarMovieList[indexPath.row])
             
-            cell.heartImageView.image = (self.viewModel.isFavoured(id: viewModel.similarMovieList[indexPath.row].details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
+            cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: viewModel.similarMovieList[indexPath.row].details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
             cell.likedButton.tag = indexPath.row
             cell.likedButton.addTarget(self, action: #selector(self.handleFavouriteSimilarButton(sender:)), for: .allEvents)
             

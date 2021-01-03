@@ -76,20 +76,20 @@ class MovieDetailsViewModel: BaseViewModel{
     }
     func handleDetailsFavouriteButton(){
         let id = details.details.imdbID ?? ""
-        if (isFavoured(id: id)){
-            deleteFavourite(id: id)
+        if (realmManager.isFavoured(id: id)){
+            realmManager.deleteFavourite(id: id)
         }else{
-            addFavourite(id: id)
+            realmManager.addFavourite(id: id)
         }
         
         
     }
     func handleFavouriteSimilarButton(index: Int){
         let id = similarMovieList[index].details.imdbID ?? ""
-        if (isFavoured(id: id)){
-            deleteFavourite(id: id)
+        if (realmManager.isFavoured(id: id)){
+            realmManager.deleteFavourite(id: id)
         }else{
-            addFavourite(id: id)
+            realmManager.addFavourite(id: id)
         }
         reloadSimilar.onNext(true)
     }

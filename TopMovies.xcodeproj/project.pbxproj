@@ -25,6 +25,8 @@
 		FA58C7AC25A0B546001D7A3D /* screenshot_1.png in Resources */ = {isa = PBXBuildFile; fileRef = FA58C7A825A0B545001D7A3D /* screenshot_1.png */; };
 		FA58C7AD25A0B546001D7A3D /* screenshot_4.png in Resources */ = {isa = PBXBuildFile; fileRef = FA58C7A925A0B545001D7A3D /* screenshot_4.png */; };
 		FA58C7AE25A0B546001D7A3D /* screenshot_2.png in Resources */ = {isa = PBXBuildFile; fileRef = FA58C7AA25A0B546001D7A3D /* screenshot_2.png */; };
+		FA58C7B025A1D69A001D7A3D /* RealmFunctionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA58C7AF25A1D69A001D7A3D /* RealmFunctionsTests.swift */; };
+		FA58C7B225A1DB66001D7A3D /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA58C7B125A1DB66001D7A3D /* RealmManager.swift */; };
 		FA63190C25975756007AFE7E /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63190525975756007AFE7E /* AppCoordinator.swift */; };
 		FA63190D25975756007AFE7E /* MainNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63190725975756007AFE7E /* MainNavigator.swift */; };
 		FA63190F25975756007AFE7E /* FavouriteNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63190925975756007AFE7E /* FavouriteNavigator.swift */; };
@@ -97,6 +99,8 @@
 		FA58C7A825A0B545001D7A3D /* screenshot_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_1.png; sourceTree = "<group>"; };
 		FA58C7A925A0B545001D7A3D /* screenshot_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_4.png; sourceTree = "<group>"; };
 		FA58C7AA25A0B546001D7A3D /* screenshot_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_2.png; sourceTree = "<group>"; };
+		FA58C7AF25A1D69A001D7A3D /* RealmFunctionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmFunctionsTests.swift; sourceTree = "<group>"; };
+		FA58C7B125A1DB66001D7A3D /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		FA63190525975756007AFE7E /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		FA63190725975756007AFE7E /* MainNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigator.swift; sourceTree = "<group>"; };
 		FA63190925975756007AFE7E /* FavouriteNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavouriteNavigator.swift; sourceTree = "<group>"; };
@@ -239,6 +243,7 @@
 				FA56C2092593FC3700D6D417 /* Info.plist */,
 				FAAD2BD4259A78FF00D0832B /* HomeViewModelTests.swift */,
 				FAAD2BD6259A945A00D0832B /* MovieDetailsTests.swift */,
+				FA58C7AF25A1D69A001D7A3D /* RealmFunctionsTests.swift */,
 			);
 			path = TopMoviesTests;
 			sourceTree = "<group>";
@@ -362,6 +367,7 @@
 			children = (
 				FAAD2BD8259AA3C600D0832B /* LottieLoadingView.swift */,
 				FAB4D3FD2597B96C0068FF95 /* Extensions */,
+				FA58C7B125A1DB66001D7A3D /* RealmManager.swift */,
 			);
 			path = "General Classes";
 			sourceTree = "<group>";
@@ -628,6 +634,7 @@
 				FA63191F25975CA0007AFE7E /* FavouritesViewModel.swift in Sources */,
 				FAAD2BD9259AA3C600D0832B /* LottieLoadingView.swift in Sources */,
 				FA6319322597737F007AFE7E /* API.swift in Sources */,
+				FA58C7B225A1DB66001D7A3D /* RealmManager.swift in Sources */,
 				FA631916259757B7007AFE7E /* CustomTabBarController.swift in Sources */,
 				FA6319352597759A007AFE7E /* Apollo.swift in Sources */,
 				FAB4D4072597B96C0068FF95 /* UICollectionView+Extensions.swift in Sources */,
@@ -648,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAAD2BD5259A78FF00D0832B /* HomeViewModelTests.swift in Sources */,
+				FA58C7B025A1D69A001D7A3D /* RealmFunctionsTests.swift in Sources */,
 				FAAD2BD7259A945A00D0832B /* MovieDetailsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

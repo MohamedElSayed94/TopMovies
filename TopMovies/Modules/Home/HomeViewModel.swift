@@ -133,10 +133,10 @@ class HomeViewModel: BaseViewModel{
     
     func handleFavouritePopularButton(index: Int){
         let id = popularMovieList[index].node?.details.imdbID ?? ""
-        if (isFavoured(id: id)){
-            deleteFavourite(id: id)
+        if (realmManager.isFavoured(id: id)){
+            realmManager.deleteFavourite(id: id)
         }else{
-            addFavourite(id: id)
+            realmManager.addFavourite(id: id)
         }
         reloadPopular.onNext(true)
         reloadTopRated.onNext(true)
@@ -144,10 +144,10 @@ class HomeViewModel: BaseViewModel{
     
     func handleFavouriteTopRatedButton(index: Int){
         let id = topRatedMovieList[index].node?.details.imdbID ?? ""
-        if (isFavoured(id: id)){
-            deleteFavourite(id: id)
+        if (realmManager.isFavoured(id: id)){
+            realmManager.deleteFavourite(id: id)
         }else{
-            addFavourite(id: id)
+            realmManager.addFavourite(id: id)
         }
         reloadTopRated.onNext(true)
         reloadPopular.onNext(true)

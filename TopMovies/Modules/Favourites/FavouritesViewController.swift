@@ -71,7 +71,7 @@ class FavouritesViewController: BaseWireframe<FavouritesViewModel>,UITableViewDe
                    cell.posterImageView?.kf.indicatorType = .activity
                    cell.posterImageView?.kf.setImage(with: url,placeholder: UIImage(named: "clapboard"))
                    cell.subtitleLabel.text = HomeViewModel().handleSubTitle(modelNode: model)
-                   cell.heartImageView.image = (self.viewModel.isFavoured(id: model.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
+            cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: model.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
                    cell.favouriteButton.tag = index
                    cell.favouriteButton.addTarget(self, action: #selector(self.handleFavouriteButton(sender:)), for: .allEvents)
                    cell.rateLabel.text = "\(model.rating)"
