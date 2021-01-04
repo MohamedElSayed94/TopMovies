@@ -81,7 +81,7 @@ class MovieDetailsViewController: BaseWireframe<MovieDetailsViewModel> {
         subTitleLabel.text = HomeViewModel().handleSubTitle(modelNode: model)
         overViewLabel.text = model.overview
         
-        likeButton.setImage((self.viewModel.realmManager.isFavoured(id: model.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart"), for: .normal)
+        likeButton.setImage((self.viewModel.realmManager.isFavoured(id: model.details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image(), for: .normal)
         
         likeButton.addTarget(self, action: #selector(self.handleDetailsFavouriteButton), for: .allEvents)
         
@@ -126,18 +126,18 @@ extension MovieDetailsViewController: UICollectionViewDelegate, UICollectionView
             let url = URL(string: (viewModel.details.images.posters[indexPath.row].image))
             let cell = imagesCollectionView.dequeue(indexPath: indexPath) as ImagesCollectionViewCell
             cell.imageView.kf.indicatorType = .activity
-            cell.imageView.kf.setImage(with: url,placeholder: UIImage(named: "clapboard"))
+            cell.imageView.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
             
             return cell
         }else if collectionView == similarMoviesCollectionView{
             let url = URL(string: (viewModel.similarMovieList[indexPath.row].poster ?? ""))
             let cell = similarMoviesCollectionView.dequeue(indexPath: indexPath) as TopRatedCell
             cell.posterImage.kf.indicatorType = .activity
-            cell.posterImage.kf.setImage(with: url,placeholder: UIImage(named: "clapboard"))
+            cell.posterImage.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
             cell.movieTitle.text = viewModel.similarMovieList[indexPath.row].title
             cell.movieSubTitle.text = HomeViewModel().handleSubTitle(modelNode: viewModel.similarMovieList[indexPath.row])
             
-            cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: viewModel.similarMovieList[indexPath.row].details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
+            cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: viewModel.similarMovieList[indexPath.row].details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image()
             cell.likedButton.tag = indexPath.row
             cell.likedButton.addTarget(self, action: #selector(self.handleFavouriteSimilarButton(sender:)), for: .allEvents)
             

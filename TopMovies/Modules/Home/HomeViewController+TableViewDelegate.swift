@@ -25,9 +25,9 @@ extension HomeViewController: UITableViewDelegate{
                 let url = URL(string: (node.poster ?? ""))
                 cell.titleLabel.text = node.title
                 cell.posterImageView?.kf.indicatorType = .activity
-                cell.posterImageView?.kf.setImage(with: url,placeholder: UIImage(named: "clapboard"))
+                cell.posterImageView?.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
                 cell.subtitleLabel.text = self.viewModel.handleSubTitle(modelNode: node)
-                cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: model.node?.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
+                cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: model.node?.details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image()
                 cell.favouriteButton.tag = index
                 cell.favouriteButton.addTarget(self, action: #selector(self.handleFavouritePopularButton(sender:)), for: .allEvents)
                 cell.rateLabel.text = "\(node.rating)"

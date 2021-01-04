@@ -99,9 +99,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let url = URL(string: (node?.poster ?? ""))
         cell.movieTitle.text = node?.title
         cell.posterImage.kf.indicatorType = .activity
-        cell.posterImage.kf.setImage(with: url,placeholder: UIImage(named: "clapboard"))
+        cell.posterImage.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
         cell.movieSubTitle.text = self.viewModel.handleSubTitle(modelNode: node)
-        cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: node?.details.imdbID ?? "")) ? UIImage(named: "filledHeart") : UIImage(named: "emptyHeart")
+        cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: node?.details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image()
         cell.likedButton.tag = indexPath.row
         cell.likedButton.addTarget(self, action: #selector(self.handleFavouriteTopRatedButton(sender:)), for: .allEvents)
         if indexPath.row == self.viewModel.topRatedMovieList.count - 1 { // last cell
