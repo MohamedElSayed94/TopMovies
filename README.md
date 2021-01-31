@@ -29,4 +29,4 @@ Simple iOS app to explore Popular and Top rated movies with the ability to save 
 <li> Lottie animation library</li>
 <li>GraphQl + Apollo iOS</li>
 <li>Unit test cases </li>
-<li> GCD/DispatchGroup</li> (To make sure that two APIs if finished run to hide loading)
+<li> GCD/DispatchGroup</li> 
