@@ -1,7 +1,7 @@
 # TopMovies
 
 
-Simple iOS app to explore Popular and Top rated movies with the ability to save favourit movies using public graphQl movie database (https://tmdb.apps.quintero.io/).
+Simple iOS app to explore Popular and Top rated movies with the ability to save favorite movies using public graphQl movie database (https://tmdb.apps.quintero.io/).
 
 
 <p float="left">
