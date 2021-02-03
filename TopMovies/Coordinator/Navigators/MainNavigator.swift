@@ -20,7 +20,7 @@ class MainNavigator: Navigator {
     required init(coordinator: Coordinator) {
         self.coordinator = coordinator
     }
-
+    
     func viewController(for destination: Destination, coordinator: Coordinator) -> UIViewController {
         switch destination {
         case .home:

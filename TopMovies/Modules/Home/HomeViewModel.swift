@@ -106,11 +106,7 @@ class HomeViewModel: BaseViewModel{
             navigateToMovieDetails.onNext(model)
         }
     }
-    
-    
 
-    
-    
     func handleFavouritePopularButton(index: Int){
         let id = popularMovieList[index].node?.details.imdbID ?? ""
         if (realmManager.isFavoured(id: id)){

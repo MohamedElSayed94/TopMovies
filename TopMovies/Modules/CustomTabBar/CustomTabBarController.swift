@@ -24,9 +24,7 @@ class CustomTabBarController: UITabBarController {
         case Favourite
         
     }
-    
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setValue(UITabBar(), forKey: "tabBar")
@@ -50,7 +48,7 @@ class CustomTabBarController: UITabBarController {
         })
     }
     
-
+    
     
     func viewControllerForTabBarItem(_ item: TabBarItems) -> UIViewController{
         switch item {
@@ -62,7 +60,7 @@ class CustomTabBarController: UITabBarController {
             let view = coordinator.Favourites.viewController(for: .favouritesMenu, coordinator: coordinator)
             view.tabBarItem = tabBarItem(for: item)
             return view
-        
+            
         }
     }
     
@@ -79,5 +77,5 @@ class CustomTabBarController: UITabBarController {
         
         return tabBarItem
     }
-
+    
 }

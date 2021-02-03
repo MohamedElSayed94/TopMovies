@@ -45,34 +45,34 @@ class FavouritesViewModel: BaseViewModel{
         favouriteMovieList.removeAll()
         favouriteMoviesArray.accept([])
         favouriteIdsArr.forEach { (id) in
-                getFavouriteMoviesbyId(id:id)
+            getFavouriteMoviesbyId(id:id)
         }
     }
     func getFavouriteMoviesbyId(id: String){
-       
-            Network.shared.apollo.fetch(query: FindByImdbIdQuery(ImdbId: id)) {[weak self] result in
-                switch result{
-                case .success(let data):
-                    // Serialize the response as JSON
-                    do{
-                        guard let json = data.data?.find.movies[0].jsonObject else {return}
-                        let serialized = try JSONSerialization.data(withJSONObject: json, options: [])
-                        
-                        let modelDecoded = try JSONDecoder().decode(Node.self, from: serialized)
-                        
-                        self?.favouriteMovieList.append(modelDecoded)
-                        self?.favouriteMoviesArray.accept(self?.favouriteMovieList ?? [])
-                    }catch{
-                        print("error in getting SimilarMovies data")
-                    }
+        
+        Network.shared.apollo.fetch(query: FindByImdbIdQuery(ImdbId: id)) {[weak self] result in
+            switch result{
+            case .success(let data):
+                // Serialize the response as JSON
+                do{
+                    guard let json = data.data?.find.movies[0].jsonObject else {return}
+                    let serialized = try JSONSerialization.data(withJSONObject: json, options: [])
                     
+                    let modelDecoded = try JSONDecoder().decode(Node.self, from: serialized)
                     
-                case .failure(let error):
-                    print(error)
-                     
-                    self?.displayError.onNext("Server Error")
+                    self?.favouriteMovieList.append(modelDecoded)
+                    self?.favouriteMoviesArray.accept(self?.favouriteMovieList ?? [])
+                }catch{
+                    print("error in getting SimilarMovies data")
                 }
+                
+                
+            case .failure(let error):
+                print(error)
+                
+                self?.displayError.onNext("Server Error")
             }
+        }
         
         
     }

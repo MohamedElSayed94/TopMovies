@@ -35,7 +35,7 @@ extension Navigator {
             coordinator.tabBar.present(viewController, animated: true, completion: nil)
         case .presentWithNavigation:
             let newVC = self.viewController(for: destination, coordinator: coordinator.subCoordinator)
-//            let navigationController = coordinator.navigationController.root
+            //            let navigationController = coordinator.navigationController.root
             coordinator.navigationController?.setViewControllers([newVC], animated: true)
             coordinator.tabBar.present(coordinator.navigationController!, animated: true, completion: nil)
         case .root:

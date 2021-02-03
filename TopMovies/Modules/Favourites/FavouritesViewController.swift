@@ -71,7 +71,7 @@ class FavouritesViewController: BaseWireframe<FavouritesViewModel>,UITableViewDe
             
             
         }.disposed(by: disposeBag)
-
+        
         tableView.rx.itemSelected.subscribe { [weak self] (indexPath) in
             guard let self = self, let indexPath = indexPath.element else { return }
             self.viewModel.didSelectItemAtIndexPath(indexPath)

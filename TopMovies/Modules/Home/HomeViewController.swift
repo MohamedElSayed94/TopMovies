@@ -48,8 +48,7 @@ class HomeViewController: BaseWireframe<HomeViewModel> {
         topRatedCollectionView.registerCell(cellClass: TopRatedCell.self)
     }
     
-    
-    
+
     override func bind(viewModel: HomeViewModel) {
         viewModel.navigateToMovieDetails.asObservable().subscribe { [weak self] (node) in
             guard let self = self, let details = node.element else { return }
@@ -102,8 +101,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             })
             
         }
-        
-        
+
         if indexPath.row == self.viewModel.topRatedMovieList.count - 1 { // last cell
             if self.viewModel.topRatedHasNext ?? true { // more items to fetch
                 LoadingIndicator.start(vc: self)

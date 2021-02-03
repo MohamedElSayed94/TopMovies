@@ -47,8 +47,8 @@ struct Similar:Decodable {
 struct SimilarEdges:Decodable {
     var node: SimilarNode?
     var defualtNode: SimilarNode { node ?? SimilarNode(details: nil)}
-    }
-    
+}
+
 
 struct SimilarNode:Decodable {
     

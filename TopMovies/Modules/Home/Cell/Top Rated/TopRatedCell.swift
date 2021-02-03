@@ -46,6 +46,6 @@ class TopRatedCell: UICollectionViewCell {
     @objc func handleFavouriteTopRatedButton(sender: UIButton){
         favouriteButtonAction!()
     }
-   
-
+    
+    
 }

@@ -17,7 +17,7 @@ class BaseWireframe<T: BaseViewModel>: UIViewController {
     var viewModel: T!
     var coordinator: Coordinator!
     
-
+    
     lazy var disposeBag: DisposeBag = {
         return DisposeBag()
     }()
@@ -29,7 +29,7 @@ class BaseWireframe<T: BaseViewModel>: UIViewController {
         bind(viewModel: viewModel)
         bindStates()
     }
-
+    
     init(viewModel: T, coordinator: Coordinator) {
         self.viewModel = viewModel
         self.coordinator = coordinator
@@ -45,27 +45,27 @@ class BaseWireframe<T: BaseViewModel>: UIViewController {
     func bind(viewModel: T){
         fatalError("Please override bind function")
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-
+    
     func bindStates(){
         viewModel.displayError.subscribe(onNext: {[weak self] (text) in
-            self?.displayError(text: text) }).disposed(by: disposeBag)
-
-
+                                            self?.displayError(text: text) }).disposed(by: disposeBag)
+        
+        
         viewModel.isLoading.subscribe { [weak self] (isLoading) in
             guard let isLoading = isLoading.element else { return }
             if(isLoading){
-                    LoadingIndicator.start(vc: self ?? UIViewController())
-
+                LoadingIndicator.start(vc: self ?? UIViewController())
+                
             } else {
                 LoadingIndicator.stop()
             }
         }.disposed(by: disposeBag)
         
-
+        
     }
     
     

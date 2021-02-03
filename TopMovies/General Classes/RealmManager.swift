@@ -20,9 +20,10 @@ enum TestOrProduction{
 }
 
 class RealmManager {
-    
-    
     var realmCase: TestOrProduction
+    
+    
+    
     
     init(realmModel: RealmClasses) {
         
@@ -34,10 +35,7 @@ class RealmManager {
             realmCase = .test
         }
     }
-    
-    
-    
-    
+
     func addFavourite(id: String){
         
         switch realmCase{
@@ -69,7 +67,7 @@ class RealmManager {
             }catch{
                 print("error in adding data to realm")
             }
-        
+            
         }
         
     }
@@ -84,7 +82,7 @@ class RealmManager {
                     realm.delete(realm.objects(favouriteRealmModel.self).filter("id=%@",id))
                 case .test:
                     realm.delete(realm.objects(testFavouriteRealmModel.self).filter("id=%@",id))
-                
+                    
                 }
                 
             }
@@ -110,7 +108,7 @@ class RealmManager {
                 model.forEach { (movie) in
                     arr.append(movie.id)
                 }
-            
+                
             }
             
             return arr

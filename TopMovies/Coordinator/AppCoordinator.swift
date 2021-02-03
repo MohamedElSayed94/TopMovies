@@ -40,7 +40,7 @@ class AppCoordinator: Coordinator {
         
         return UINavigationController()
     }()
-
+    
     var navigationController: UINavigationController? {
         if(isSub){
             return subNavigationController
