@@ -11,7 +11,7 @@ import RealmSwift
 
 
 protocol RealmClasses: Object{
-     
+    
     
 }
 enum TestOrProduction{
@@ -21,14 +21,16 @@ enum TestOrProduction{
 
 class RealmManager {
     
-    let realm = try! Realm()
-    var realmCase: TestOrProduction!
+    
+    var realmCase: TestOrProduction
     
     init(realmModel: RealmClasses) {
         
         if type(of: realmModel)  == type(of: favouriteRealmModel()) {
             realmCase = .production
         }else if type(of: realmModel) == type(of: testFavouriteRealmModel()){
+            realmCase = .test
+        }else{
             realmCase = .test
         }
     }
@@ -43,6 +45,7 @@ class RealmManager {
             let model = favouriteRealmModel()
             model.id = id
             do{
+                let realm = try Realm()
                 try realm.write {
                     if (!isFavoured(id: id)){
                         realm.add(model)
@@ -56,6 +59,7 @@ class RealmManager {
             let model = testFavouriteRealmModel()
             model.id = id
             do{
+                let realm = try Realm()
                 try realm.write {
                     if (!isFavoured(id: id)){
                         realm.add(model)
@@ -65,8 +69,7 @@ class RealmManager {
             }catch{
                 print("error in adding data to realm")
             }
-        case .none:
-            ()
+        
         }
         
     }
@@ -74,14 +77,14 @@ class RealmManager {
     func deleteFavourite(id: String){
         
         do{
+            let realm = try Realm()
             try realm.write {
                 switch realmCase{
                 case .production:
                     realm.delete(realm.objects(favouriteRealmModel.self).filter("id=%@",id))
                 case .test:
                     realm.delete(realm.objects(testFavouriteRealmModel.self).filter("id=%@",id))
-                case .none:
-                    ()
+                
                 }
                 
             }
@@ -92,53 +95,58 @@ class RealmManager {
     
     func getFavouriteFromRealm() -> [String]{
         var arr = [String]()
-        
-        switch realmCase{
-        case .production:
-            let model: Results<favouriteRealmModel>
-            model = realm.objects(favouriteRealmModel.self )
-            model.forEach { (movie) in
-                arr.append(movie.id)
-            }
-        case .test:
-            let model: Results<testFavouriteRealmModel>
-            model = realm.objects(testFavouriteRealmModel.self )
-            model.forEach { (movie) in
-                arr.append(movie.id)
-            }
-        case .none:
-            ()
-        }
-        
-        return arr
-    }
-    func isFavoured(id:String) -> Bool{
-        
-        switch realmCase{
-        case .production:
-            let favArr = realm.objects(favouriteRealmModel.self)
-            let model = favouriteRealmModel()
-            model.id = id
-            if favArr.contains(where: { $0.id == id }){
-                return true
-            }else{
-                return false
-            }
-        case .test:
-            let favArr = realm.objects(testFavouriteRealmModel.self)
-            let model = testFavouriteRealmModel()
-            model.id = id
-            if favArr.contains(where: { $0.id == id }){
-                return true
-            }else{
-                return false
+        do{
+            let realm = try Realm()
+            switch realmCase{
+            case .production:
+                let model: Results<favouriteRealmModel>
+                model = realm.objects(favouriteRealmModel.self )
+                model.forEach { (movie) in
+                    arr.append(movie.id)
+                }
+            case .test:
+                let model: Results<testFavouriteRealmModel>
+                model = realm.objects(testFavouriteRealmModel.self )
+                model.forEach { (movie) in
+                    arr.append(movie.id)
+                }
+            
             }
             
-        case .none:
-            ()
+            return arr
+        }catch{
+            return [String]()
         }
         
-        return Bool()
+    }
+    func isFavoured(id:String) -> Bool{
+        do{
+            let realm = try Realm()
+            switch realmCase{
+            case .production:
+                let favArr = realm.objects(favouriteRealmModel.self)
+                let model = favouriteRealmModel()
+                model.id = id
+                if favArr.contains(where: { $0.id == id }){
+                    return true
+                }else{
+                    return false
+                }
+            case .test:
+                let favArr = realm.objects(testFavouriteRealmModel.self)
+                let model = testFavouriteRealmModel()
+                model.id = id
+                if favArr.contains(where: { $0.id == id }){
+                    return true
+                }else{
+                    return false
+                }
+            }
+            
+        }catch{
+            return Bool()
+        }
+        
     }
     
 }

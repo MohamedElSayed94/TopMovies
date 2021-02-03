@@ -78,7 +78,7 @@ class MovieDetailsViewController: BaseWireframe<MovieDetailsViewModel> {
         movieTitle.text = model.title
         budgetLabel.text = (viewModel.formatLargeNumber(number: model.details.budget) == "0") ? "unknown budget" : "\(viewModel.formatLargeNumber(number: model.details.budget))$"
         movieDuration.text = "\(model.details.runtime) min"
-        subTitleLabel.text = HomeViewModel().handleSubTitle(modelNode: model)
+        subTitleLabel.text = StringModification().handleSubTitle(modelNode: model)
         overViewLabel.text = model.overview
         
         likeButton.setImage((self.viewModel.realmManager.isFavoured(id: model.details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image(), for: .normal)
@@ -135,7 +135,7 @@ extension MovieDetailsViewController: UICollectionViewDelegate, UICollectionView
             cell.posterImage.kf.indicatorType = .activity
             cell.posterImage.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
             cell.movieTitle.text = viewModel.similarMovieList[indexPath.row].title
-            cell.movieSubTitle.text = HomeViewModel().handleSubTitle(modelNode: viewModel.similarMovieList[indexPath.row])
+            cell.movieSubTitle.text = StringModification().handleSubTitle(modelNode: viewModel.similarMovieList[indexPath.row])
             
             cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: viewModel.similarMovieList[indexPath.row].details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image()
             cell.likedButton.tag = indexPath.row

@@ -16,6 +16,10 @@ class PopularTableViewCell: UITableViewCell {
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
     
+    var index:Int?
+    var viewModel: BaseViewModel?
+    var node: Node?
+    var favouriteButtonAction: (()->())?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,5 +30,32 @@ class PopularTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+    func configure(node:Node,viewModel: BaseViewModel, favouriteButtonAction: @escaping ()->() ){
+        index = getIndexPath()?.row
+        self.favouriteButtonAction = favouriteButtonAction
+        self.viewModel = viewModel
+        self.node = node
+        
+        let url = URL(string: (node.poster ?? ""))
+        titleLabel.text = node.title
+        posterImageView?.kf.indicatorType = .activity
+        posterImageView?.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
+        subtitleLabel.text = StringModification().handleSubTitle(modelNode: node)
+        heartImageView.image = (self.viewModel?.realmManager.isFavoured(id: node.details.imdbID ?? "") ?? Bool()) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image()
+        favouriteButton.tag = index ?? Int()
+        favouriteButton.addTarget(self, action: #selector(self.handleFavouritePopularButton(sender:)), for: .allEvents)
+        rateLabel.text = "\(node.rating)"
+        
+    }
+    @objc func handleFavouritePopularButton(sender: UIButton){
+        favouriteButtonAction!()
+    }
+    func getIndexPath() -> IndexPath? {
+        guard let superView = self.superview as? UITableView else {
+            print("superview is not a UITableView - getIndexPath")
+            return nil
+        }
+        let indexPath = superView.indexPath(for: self)
+        return indexPath
+    }
 }

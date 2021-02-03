@@ -12,5 +12,7 @@ import Apollo
 
 class Network{
     static let shared = Network()
-    lazy var  apollo = ApolloClient(url: URL(string: "https://tmdb.apps.quintero.io/")!)
+    
+    let moviesUrl = URL(string: "https://tmdb.apps.quintero.io/")!
+    lazy var  apollo = ApolloClient(url: moviesUrl)
 }

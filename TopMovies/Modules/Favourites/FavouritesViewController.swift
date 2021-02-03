@@ -11,16 +11,16 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 class FavouritesViewController: BaseWireframe<FavouritesViewModel>,UITableViewDelegate {
-
+    
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.title = "Favourites List"
         setupTableViewDelegate()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.getFavouriteMoviesId()
@@ -58,44 +58,36 @@ class FavouritesViewController: BaseWireframe<FavouritesViewModel>,UITableViewDe
     
     
     func setupTableViewDelegate(){
-          
-           tableView.estimatedRowHeight = tableView.frame.size.height / 3
-           tableView.registerCellNib(cellClass: PopularTableViewCell.self)
-           tableView.rx.setDelegate(self).disposed(by: disposeBag)
-           viewModel.favouriteMoviesArray.bind(to: tableView.rx.items(cellIdentifier: String(describing: PopularTableViewCell.self), cellType: PopularTableViewCell.self)) { index, model, cell in
-               cell.selectionStyle = .none
-               
-                   let url = URL(string: (model.poster ?? ""))
-                       cell.titleLabel.text = model.title
-                   
-                   cell.posterImageView?.kf.indicatorType = .activity
-                   cell.posterImageView?.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
-                   cell.subtitleLabel.text = HomeViewModel().handleSubTitle(modelNode: model)
-            cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: model.details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image()
-                   cell.favouriteButton.tag = index
-                   cell.favouriteButton.addTarget(self, action: #selector(self.handleFavouriteButton(sender:)), for: .allEvents)
-                   cell.rateLabel.text = "\(model.rating)"
-                   
-           }.disposed(by: disposeBag)
-           
-           
-           
-           tableView.rx.itemSelected.subscribe { [weak self] (indexPath) in
-               guard let self = self, let indexPath = indexPath.element else { return }
-               self.viewModel.didSelectItemAtIndexPath(indexPath)
-               
-               
-           }.disposed(by: disposeBag)
-           
-       }
-       
-       func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return 160
-       }
+        
+        tableView.estimatedRowHeight = tableView.frame.size.height / 3
+        tableView.registerCellNib(cellClass: PopularTableViewCell.self)
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        viewModel.favouriteMoviesArray.bind(to: tableView.rx.items(cellIdentifier: String(describing: PopularTableViewCell.self), cellType: PopularTableViewCell.self)) { index, model, cell in
+            cell.selectionStyle = .none
+            
+            cell.configure(node: model, viewModel: self.viewModel, favouriteButtonAction: {
+                self.viewModel.handleFavouriteButton(index: index)
+            })
+            
+            
+        }.disposed(by: disposeBag)
+
+        tableView.rx.itemSelected.subscribe { [weak self] (indexPath) in
+            guard let self = self, let indexPath = indexPath.element else { return }
+            self.viewModel.didSelectItemAtIndexPath(indexPath)
+            
+            
+        }.disposed(by: disposeBag)
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 160
+    }
     
     @objc func handleFavouriteButton(sender: UIButton){
         self.viewModel.handleFavouriteButton(index: sender.tag)
         
     }
-
+    
 }

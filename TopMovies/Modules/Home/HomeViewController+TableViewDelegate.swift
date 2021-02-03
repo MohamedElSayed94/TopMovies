@@ -22,20 +22,14 @@ extension HomeViewController: UITableViewDelegate{
         viewModel.popularMoviesArray.bind(to: popularTableView.rx.items(cellIdentifier: String(describing: PopularTableViewCell.self), cellType: PopularTableViewCell.self)) { index, model, cell in
             cell.selectionStyle = .none
             if let node = model.node {
-                let url = URL(string: (node.poster ?? ""))
-                cell.titleLabel.text = node.title
-                cell.posterImageView?.kf.indicatorType = .activity
-                cell.posterImageView?.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
-                cell.subtitleLabel.text = self.viewModel.handleSubTitle(modelNode: node)
-                cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: model.node?.details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image()
-                cell.favouriteButton.tag = index
-                cell.favouriteButton.addTarget(self, action: #selector(self.handleFavouritePopularButton(sender:)), for: .allEvents)
-                cell.rateLabel.text = "\(node.rating)"
-                if index == self.viewModel.popularMoviesArray.value.count - 1 { // last cell
-                    if self.viewModel.popularHasNext ?? true { // more items to fetch
-                        LoadingIndicator.start(vc: self)
-                        self.viewModel.getPopularMovies()
-                    }
+                cell.configure(node: node, viewModel: self.viewModel, favouriteButtonAction: {
+                    self.viewModel.handleFavouritePopularButton(index: index)
+                })
+            }
+            if index == self.viewModel.popularMoviesArray.value.count - 1 { // last cell
+                if self.viewModel.popularHasNext ?? true { // more items to fetch
+                    LoadingIndicator.start(vc: self)
+                    self.viewModel.getPopularMovies()
                 }
             }
         }.disposed(by: disposeBag)

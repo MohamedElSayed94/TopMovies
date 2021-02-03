@@ -96,14 +96,14 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         let cell = topRatedCollectionView.dequeue(indexPath: indexPath) as TopRatedCell
         let node = viewModel.topRatedMovieList[indexPath.row].node
-        let url = URL(string: (node?.poster ?? ""))
-        cell.movieTitle.text = node?.title
-        cell.posterImage.kf.indicatorType = .activity
-        cell.posterImage.kf.setImage(with: url,placeholder: TopMoviesImages.clapboard.image())
-        cell.movieSubTitle.text = self.viewModel.handleSubTitle(modelNode: node)
-        cell.heartImageView.image = (self.viewModel.realmManager.isFavoured(id: node?.details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image()
-        cell.likedButton.tag = indexPath.row
-        cell.likedButton.addTarget(self, action: #selector(self.handleFavouriteTopRatedButton(sender:)), for: .allEvents)
+        if let node = node {
+            cell.configure(node: node, viewModel: self.viewModel, index: indexPath.row, favouriteButtonAction: {
+                self.viewModel.handleFavouriteTopRatedButton(index: indexPath.row)
+            })
+            
+        }
+        
+        
         if indexPath.row == self.viewModel.topRatedMovieList.count - 1 { // last cell
             if self.viewModel.topRatedHasNext ?? true { // more items to fetch
                 LoadingIndicator.start(vc: self)

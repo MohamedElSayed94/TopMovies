@@ -25,6 +25,8 @@ class FavouritesViewModel: BaseViewModel{
         
         
     }
+    
+    
     func handleFavouriteButton(index: Int){
         guard  index < favouriteMovieList.count else {return}
         let id = favouriteMovieList[index].details.imdbID ?? ""

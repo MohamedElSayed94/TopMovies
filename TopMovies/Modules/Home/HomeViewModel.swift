@@ -44,7 +44,7 @@ class HomeViewModel: BaseViewModel{
                 // Serialize the response as JSON
                 do{
                     let json = data.data?.movies.popular.jsonObject
-                    let serialized = try JSONSerialization.data(withJSONObject: json!, options: [])
+                    let serialized = try JSONSerialization.data(withJSONObject: json, options: [])
                     let modelDecoded = try JSONDecoder().decode(Movie.self, from: serialized)
                     self?.popularItemsTotalCount = modelDecoded.totalCount
                     self?.popularEndCursor = modelDecoded.pageInfo.endCursor
@@ -108,27 +108,7 @@ class HomeViewModel: BaseViewModel{
     }
     
     
-    func getYearFromDate(stringDate: String) -> Int{
-        var age: Int? {
-            let dateFormater = DateFormatter()
-            dateFormater.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-            guard let date = dateFormater.date(from: stringDate) else {
-                return nil
-            }
-            let calendar = Calendar.current
-            let age = calendar.component(.year, from: date)
-            return age
-        }
-        return age ?? 0
-    }
-    
-    func handleSubTitle(modelNode: Node?) -> String{
-        var genres = ""
-        modelNode?.details.genres.forEach { (genre) in
-            genres += ", \(genre.name)"
-        }
-        return "\(self.getYearFromDate(stringDate: modelNode?.releaseDate ?? ""))\(genres)"
-    }
+
     
     
     func handleFavouritePopularButton(index: Int){
@@ -142,7 +122,7 @@ class HomeViewModel: BaseViewModel{
         reloadTopRated.onNext(true)
     }
     
-    func handleFavouriteTopRatedButton(index: Int){
+    func handleFavouriteTopRatedButton(index: Int) -> (){
         let id = topRatedMovieList[index].node?.details.imdbID ?? ""
         if (realmManager.isFavoured(id: id)){
             realmManager.deleteFavourite(id: id)
