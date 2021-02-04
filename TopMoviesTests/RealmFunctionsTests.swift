@@ -6,17 +6,15 @@
 //  Copyright © 2021 Mohamed Elsayed. All rights reserved.
 //
 
-import XCTest
 import RealmSwift
 @testable import TopMovies
+import XCTest
 class RealmFunctionsTests: XCTestCase {
-
     var sut: RealmManager!
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         sut = RealmManager(realmModel: testFavouriteRealmModel())
-        
     }
 
     override func tearDownWithError() throws {
@@ -25,6 +23,7 @@ class RealmFunctionsTests: XCTestCase {
         removeAllFavourites()
         sut = nil
     }
+
     func testAddNewFavouriteAndGetNewFavourite() throws {
         removeAllFavourites()
         sut.addFavourite(id: "1")
@@ -33,7 +32,6 @@ class RealmFunctionsTests: XCTestCase {
         
         XCTAssertFalse(favouriteArrCount == 0)
         XCTAssertTrue(favouriteArrCount == 1)
-        
         
         let isInFavourites = favArray.contains("1")
         
@@ -55,7 +53,7 @@ class RealmFunctionsTests: XCTestCase {
         XCTAssertTrue(favouriteArrCount == 1)
     }
     
-    func testIsfavoured() throws{
+    func testIsfavoured() throws {
         removeAllFavourites()
         sut.addFavourite(id: "13")
         let isFavoured1 = sut.isFavoured(id: "13")
@@ -64,15 +62,11 @@ class RealmFunctionsTests: XCTestCase {
         XCTAssertFalse(isFavoured2 == true)
     }
     
-    
-    
-    
-    func removeAllFavourites(){
+    func removeAllFavourites() {
         var idArray = [String]()
         idArray = sut.getFavouriteFromRealm()
-        idArray.forEach { (id) in
+        idArray.forEach { id in
             sut.deleteFavourite(id: id)
         }
     }
-    
 }
