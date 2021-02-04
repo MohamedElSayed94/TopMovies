@@ -15,6 +15,7 @@ class CustomTabBarController: UITabBarController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -22,35 +23,30 @@ class CustomTabBarController: UITabBarController {
     enum TabBarItems: Int, CaseIterable {
         case Home
         case Favourite
-        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setValue(UITabBar(), forKey: "tabBar")
+        setValue(UITabBar(), forKey: "tabBar")
         setupTabBarItems()
         setupTabBarUI()
     }
     
-    
-    
-    func setupTabBarUI(){
+    func setupTabBarUI() {
         tabBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         tabBar.unselectedItemTintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.6847319732)
         tabBar.barTintColor = .black
     }
     
-    private func setupTabBarItems(){
-        self.viewControllers = TabBarItems.allCases.map({
+    private func setupTabBarItems() {
+        viewControllers = TabBarItems.allCases.map {
             let view = viewControllerForTabBarItem($0)
             let navigation = UINavigationController(rootViewController: view)
             return navigation
-        })
+        }
     }
     
-    
-    
-    func viewControllerForTabBarItem(_ item: TabBarItems) -> UIViewController{
+    func viewControllerForTabBarItem(_ item: TabBarItems) -> UIViewController {
         switch item {
         case .Home:
             let view = coordinator.Main.viewController(for: .home, coordinator: coordinator)
@@ -60,11 +56,10 @@ class CustomTabBarController: UITabBarController {
             let view = coordinator.Favourites.viewController(for: .favouritesMenu, coordinator: coordinator)
             view.tabBarItem = tabBarItem(for: item)
             return view
-            
         }
     }
     
-    private func tabBarItem(for item: TabBarItems) -> UITabBarItem?{
+    private func tabBarItem(for item: TabBarItems) -> UITabBarItem? {
         let tabBarItem: UITabBarItem
         switch item {
         case .Home:
@@ -77,5 +72,4 @@ class CustomTabBarController: UITabBarController {
         
         return tabBarItem
     }
-    
 }

@@ -6,29 +6,25 @@
 //  Copyright © 2020 Mohamed Elsayed. All rights reserved.
 //
 
-import UIKit
 import Kingfisher
 import RxCocoa
 import RxSwift
+import UIKit
 
 class MovieDetailsViewController: BaseWireframe<MovieDetailsViewModel> {
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var mainImageView: UIImageView!
-    @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var movieTitle: UILabel!
-    @IBOutlet weak var shareButton: UIButton!
-    @IBOutlet weak var budgetLabel: UILabel!
-    @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var movieDuration: UILabel!
-    @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var subTitleLabel: UILabel!
-    @IBOutlet weak var overViewLabel: UILabel!
-    @IBOutlet weak var imagesCollectionView: UICollectionView!
-    @IBOutlet weak var similarMoviesCollectionView: UICollectionView!
-    
-    
-    
-    
+    @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet var mainImageView: UIImageView!
+    @IBOutlet var backButton: UIButton!
+    @IBOutlet var movieTitle: UILabel!
+    @IBOutlet var shareButton: UIButton!
+    @IBOutlet var budgetLabel: UILabel!
+    @IBOutlet var stackView: UIStackView!
+    @IBOutlet var movieDuration: UILabel!
+    @IBOutlet var likeButton: UIButton!
+    @IBOutlet var subTitleLabel: UILabel!
+    @IBOutlet var overViewLabel: UILabel!
+    @IBOutlet var imagesCollectionView: UICollectionView!
+    @IBOutlet var similarMoviesCollectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,12 +34,11 @@ class MovieDetailsViewController: BaseWireframe<MovieDetailsViewModel> {
         setupCollectionViewDelegates()
         registerCells()
         shareButton.addTarget(self, action: #selector(shareMovieURL), for: .allEvents)
-        
     }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.getSimilarMovies()
-        
     }
     
     override func bind(viewModel: MovieDetailsViewModel) {
@@ -53,27 +48,25 @@ class MovieDetailsViewController: BaseWireframe<MovieDetailsViewModel> {
             
         }).disposed(by: disposeBag)
         
-        viewModel.similarMoviesArray.asObservable().subscribe { [weak self] (node) in
+        viewModel.similarMoviesArray.asObservable().subscribe { [weak self] _ in
             guard let self = self else { return }
             self.similarMoviesCollectionView.reloadData()
         }.disposed(by: disposeBag)
         
-        viewModel.reloadSimilar.subscribe { [weak self] (isLoading) in
+        viewModel.reloadSimilar.subscribe { [weak self] isLoading in
             guard let isLoading = isLoading.element else { return }
-            if(isLoading){
+            if isLoading {
                 self?.similarMoviesCollectionView.reloadData()
             }
         }.disposed(by: disposeBag)
-        
     }
     
-    
-    func updateData(){
+    func updateData() {
         let model = viewModel.details
         
-        let url = URL(string: ( model.images.posters.last?.image) ?? "")
+        let url = URL(string: (model.images.posters.last?.image) ?? "")
         mainImageView.kf.indicatorType = .activity
-        mainImageView.kf.setImage(with: url,placeholder: UIImage(named: "clapboard"))
+        mainImageView.kf.setImage(with: url, placeholder: UIImage(named: "clapboard"))
         
         movieTitle.text = model.title
         budgetLabel.text = (viewModel.formatLargeNumber(number: model.details.budget) == "0") ? "unknown budget" : "\(viewModel.formatLargeNumber(number: model.details.budget))$"
@@ -81,42 +74,37 @@ class MovieDetailsViewController: BaseWireframe<MovieDetailsViewModel> {
         subTitleLabel.text = StringModification().handleSubTitle(modelNode: model)
         overViewLabel.text = model.overview
         
-        likeButton.setImage((self.viewModel.realmManager.isFavoured(id: model.details.imdbID ?? "")) ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image(), for: .normal)
+        likeButton.setImage(viewModel.realmManager.isFavoured(id: model.details.imdbID ?? "") ? TopMoviesImages.filledHeart.image() : TopMoviesImages.emptyHeart.image(), for: .normal)
         
-        likeButton.addTarget(self, action: #selector(self.handleDetailsFavouriteButton), for: .allEvents)
+        likeButton.addTarget(self, action: #selector(handleDetailsFavouriteButton), for: .allEvents)
         
         imagesCollectionView.reloadData()
         similarMoviesCollectionView.reloadData()
     }
     
-    
-    func setupCollectionViewDelegates(){
-        
+    func setupCollectionViewDelegates() {
         imagesCollectionView.delegate = self
         imagesCollectionView.dataSource = self
         similarMoviesCollectionView.delegate = self
         similarMoviesCollectionView.dataSource = self
-        
     }
     
-    func registerCells(){
+    func registerCells() {
         imagesCollectionView.registerCell(cellClass: ImagesCollectionViewCell.self)
         similarMoviesCollectionView.registerCell(cellClass: TopRatedCell.self)
     }
-    @objc func shareMovieURL(){
+
+    @objc func shareMovieURL() {
         let vc = UIActivityViewController(activityItems: [viewModel.details.details.homepage ?? ""], applicationActivities: [])
-        self.present(vc, animated: true)
+        present(vc, animated: true)
     }
     
-    @objc func handleDetailsFavouriteButton(){
+    @objc func handleDetailsFavouriteButton() {
         viewModel.handleDetailsFavouriteButton()
         updateData()
-        
     }
-    @objc func handleFavouriteSimilarButton(sender:UIButton){
+
+    @objc func handleFavouriteSimilarButton(sender: UIButton) {
         viewModel.handleFavouriteSimilarButton(index: sender.tag)
     }
-    
 }
-
-

@@ -7,65 +7,60 @@
 //
 
 import Foundation
-import RxSwift
-import RxCocoa
 import RealmSwift
-class FavouritesViewModel: BaseViewModel{
+import RxCocoa
+import RxSwift
+class FavouritesViewModel: BaseViewModel {
     var favouriteMoviesArray: BehaviorRelay<[Node]> = .init(value: [])
     var favouriteMovieList = [Node]()
     var navigateToMovieDetails: PublishSubject<Node> = .init()
     var reloadTableView: PublishSubject<Bool> = .init()
     var favouriteIdsArr = [String]()
     
-    
-    
-    func didSelectItemAtIndexPath(_ indexPath: IndexPath){
+    func didSelectItemAtIndexPath(_ indexPath: IndexPath) {
         let model = favouriteMovieList[indexPath.row]
         navigateToMovieDetails.onNext(model)
-        
-        
     }
     
-    
-    func handleFavouriteButton(index: Int){
-        guard  index < favouriteMovieList.count else {return}
+    func handleFavouriteButton(index: Int) {
+        guard index < favouriteMovieList.count else { return }
         let id = favouriteMovieList[index].details.imdbID ?? ""
-        if (realmManager.isFavoured(id: id)){
+        if realmManager.isFavoured(id: id) {
             realmManager.deleteFavourite(id: id)
-        }else{
+        } else {
             realmManager.addFavourite(id: id)
         }
         
         getFavouriteMoviesId()
-        self.reloadTableView.onNext(true)
+        reloadTableView.onNext(true)
     }
-    func getFavouriteMoviesId(){
+
+    func getFavouriteMoviesId() {
         favouriteIdsArr = realmManager.getFavouriteFromRealm()
         
         favouriteMovieList.removeAll()
         favouriteMoviesArray.accept([])
-        favouriteIdsArr.forEach { (id) in
-            getFavouriteMoviesbyId(id:id)
+        favouriteIdsArr.forEach { id in
+            getFavouriteMoviesbyId(id: id)
         }
     }
-    func getFavouriteMoviesbyId(id: String){
-        
-        Network.shared.apollo.fetch(query: FindByImdbIdQuery(ImdbId: id)) {[weak self] result in
-            switch result{
+
+    func getFavouriteMoviesbyId(id: String) {
+        Network.shared.apollo.fetch(query: FindByImdbIdQuery(ImdbId: id)) { [weak self] result in
+            switch result {
             case .success(let data):
                 // Serialize the response as JSON
-                do{
-                    guard let json = data.data?.find.movies[0].jsonObject else {return}
+                do {
+                    guard let json = data.data?.find.movies[0].jsonObject else { return }
                     let serialized = try JSONSerialization.data(withJSONObject: json, options: [])
                     
                     let modelDecoded = try JSONDecoder().decode(Node.self, from: serialized)
                     
                     self?.favouriteMovieList.append(modelDecoded)
                     self?.favouriteMoviesArray.accept(self?.favouriteMovieList ?? [])
-                }catch{
+                } catch {
                     print("error in getting SimilarMovies data")
                 }
-                
                 
             case .failure(let error):
                 print(error)
@@ -73,7 +68,5 @@ class FavouritesViewModel: BaseViewModel{
                 self?.displayError.onNext("Server Error")
             }
         }
-        
-        
     }
 }

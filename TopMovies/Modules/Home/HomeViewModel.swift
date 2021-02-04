@@ -10,10 +10,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-
-
-class HomeViewModel: BaseViewModel{
-    
+class HomeViewModel: BaseViewModel {
     var popularMoviesArray: BehaviorRelay<[Edges]> = .init(value: [])
     var popularMovieList = [Edges]()
     
@@ -26,23 +23,22 @@ class HomeViewModel: BaseViewModel{
     let networkDispatchGroup = DispatchGroup()
     var topRatedEndCursor: String?
     var popularEndCursor: String?
-    var popularItemsTotalCount : Int?
-    var topRatedItemsTotalCount : Int?
+    var popularItemsTotalCount: Int?
+    var topRatedItemsTotalCount: Int?
     var popularHasNext: Bool?
     var topRatedHasNext: Bool?
     override init() {
-        super .init()
-        self.isLoading.onNext(true)
-        
+        super.init()
+        isLoading.onNext(true)
     }
     
-    func getPopularMovies(){
+    func getPopularMovies() {
         networkDispatchGroup.enter()
-        Network.shared.apollo.fetch(query: MoviesQuery(firstNumberOfMovies: 15, endCursor: popularEndCursor)) {[weak self] result in
-            switch result{
+        Network.shared.apollo.fetch(query: MoviesQuery(firstNumberOfMovies: 15, endCursor: popularEndCursor)) { [weak self] result in
+            switch result {
             case .success(let data):
                 // Serialize the response as JSON
-                do{
+                do {
                     let json = data.data?.movies.popular.jsonObject
                     let serialized = try JSONSerialization.data(withJSONObject: json, options: [])
                     let modelDecoded = try JSONDecoder().decode(Movie.self, from: serialized)
@@ -50,13 +46,12 @@ class HomeViewModel: BaseViewModel{
                     self?.popularEndCursor = modelDecoded.pageInfo.endCursor
                     self?.popularHasNext = modelDecoded.pageInfo.hasNextPage
                     print(self?.popularEndCursor)
-                    guard var edges = modelDecoded.edges else{ self?.getPopularMovies(); return}
+                    guard var edges = modelDecoded.edges else { self?.getPopularMovies(); return }
                     edges.removeAll(where: { $0.node == nil })
                     
                     self?.popularMovieList += edges
                     self?.popularMoviesArray.accept(self!.popularMovieList)
-                }catch{
-                    
+                } catch {
                     print("error in getting PopularMovies Data")
                 }
                 LoadingIndicator.stop()
@@ -70,25 +65,25 @@ class HomeViewModel: BaseViewModel{
         }
     }
     
-    func getTopRatedMovies(){
+    func getTopRatedMovies() {
         networkDispatchGroup.enter()
         Network.shared.apollo.fetch(query: TopRatedMoviesQuery(firstNumberOfMovies: 15, endCursor: topRatedEndCursor)) { [weak self] result in
-            switch result{
+            switch result {
             case .success(let data):
                 // Serialize the response as JSON
-                do{
-                    guard let json = data.data?.movies.topRated.jsonObject else {return}
+                do {
+                    guard let json = data.data?.movies.topRated.jsonObject else { return }
                     let serialized = try JSONSerialization.data(withJSONObject: json, options: [])
                     let modelDecoded = try JSONDecoder().decode(Movie.self, from: serialized)
                     self?.topRatedItemsTotalCount = modelDecoded.totalCount
                     self?.topRatedEndCursor = modelDecoded.pageInfo.endCursor
                     self?.topRatedHasNext = modelDecoded.pageInfo.hasNextPage
                     print(self?.topRatedEndCursor)
-                    guard var edges = modelDecoded.edges else{ self?.getTopRatedMovies(); return}
+                    guard var edges = modelDecoded.edges else { self?.getTopRatedMovies(); return }
                     edges.removeAll(where: { $0.node == nil })
                     self?.topRatedMovieList += edges
                     self?.topRatedMoviesArray.accept(self!.popularMovieList)
-                }catch{
+                } catch {
                     print("error in getting TopRatedMovies Data")
                 }
                 LoadingIndicator.stop()
@@ -101,32 +96,31 @@ class HomeViewModel: BaseViewModel{
         }
     }
     
-    func didSelectItemAtIndexPath(_ indexPath: IndexPath){
-        if let model = popularMovieList[indexPath.row].node{
+    func didSelectItemAtIndexPath(_ indexPath: IndexPath) {
+        if let model = popularMovieList[indexPath.row].node {
             navigateToMovieDetails.onNext(model)
         }
     }
 
-    func handleFavouritePopularButton(index: Int){
+    func handleFavouritePopularButton(index: Int) {
         let id = popularMovieList[index].node?.details.imdbID ?? ""
-        if (realmManager.isFavoured(id: id)){
+        if realmManager.isFavoured(id: id) {
             realmManager.deleteFavourite(id: id)
-        }else{
+        } else {
             realmManager.addFavourite(id: id)
         }
         reloadPopular.onNext(true)
         reloadTopRated.onNext(true)
     }
     
-    func handleFavouriteTopRatedButton(index: Int) -> (){
+    func handleFavouriteTopRatedButton(index: Int) {
         let id = topRatedMovieList[index].node?.details.imdbID ?? ""
-        if (realmManager.isFavoured(id: id)){
+        if realmManager.isFavoured(id: id) {
             realmManager.deleteFavourite(id: id)
-        }else{
+        } else {
             realmManager.addFavourite(id: id)
         }
         reloadTopRated.onNext(true)
         reloadPopular.onNext(true)
     }
-    
 }

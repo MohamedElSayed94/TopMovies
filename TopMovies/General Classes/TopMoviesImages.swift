@@ -9,14 +9,12 @@
 import Foundation
 import UIKit
 
-
-
 enum TopMoviesImages {
     case filledHeart
     case emptyHeart
     case clapboard
-    
-    func image() -> UIImage{
+
+    func image() -> UIImage {
         switch self {
         case .filledHeart:
             guard let image = UIImage(named: "filledHeart") else { return UIImage() }

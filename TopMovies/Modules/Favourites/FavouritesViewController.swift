@@ -6,59 +6,50 @@
 //  Copyright © 2020 Mohamed Elsayed. All rights reserved.
 //
 
-import UIKit
-import RxSwift
-import RxCocoa
 import Kingfisher
-class FavouritesViewController: BaseWireframe<FavouritesViewModel>,UITableViewDelegate {
-    
-    @IBOutlet weak var tableView: UITableView!
+import RxCocoa
+import RxSwift
+import UIKit
+class FavouritesViewController: BaseWireframe<FavouritesViewModel>, UITableViewDelegate {
+    @IBOutlet var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        self.title = "Favourites List"
+        title = "Favourites List"
         setupTableViewDelegate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.getFavouriteMoviesId()
-        
-        
     }
+
     override func bind(viewModel: FavouritesViewModel) {
-        viewModel.navigateToMovieDetails.asObservable().subscribe { [weak self] (node) in
+        viewModel.navigateToMovieDetails.asObservable().subscribe { [weak self] node in
             guard let self = self, let details = node.element else { return }
             let detailsViewModel = MovieDetailsViewModel(details: details)
             
-            detailsViewModel.onDismiss.asObserver().subscribe(onNext: { (loaded) in
+            detailsViewModel.onDismiss.asObserver().subscribe(onNext: { _ in
                 DispatchQueue.main.async {
                     self.viewModel.getFavouriteMoviesId()
                     self.viewModel.reloadTableView.onNext(true)
-                    
                 }
                 
             }).disposed(by: self.disposeBag)
-            
             
             self.coordinator.Main.navigate(to: .movieDetails(ViewModel: detailsViewModel), with: .present)
             
         }.disposed(by: disposeBag)
         
-        
-        
-        viewModel.reloadTableView.subscribe (onNext:{ [weak self] (isLoading) in
-            if(isLoading){
+        viewModel.reloadTableView.subscribe(onNext: { [weak self] isLoading in
+            if isLoading {
                 self?.tableView.reloadData()
             }
         }).disposed(by: disposeBag)
     }
     
-    
-    
-    func setupTableViewDelegate(){
-        
+    func setupTableViewDelegate() {
         tableView.estimatedRowHeight = tableView.frame.size.height / 3
         tableView.registerCellNib(cellClass: PopularTableViewCell.self)
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
@@ -69,25 +60,20 @@ class FavouritesViewController: BaseWireframe<FavouritesViewModel>,UITableViewDe
                 self.viewModel.handleFavouriteButton(index: index)
             })
             
-            
         }.disposed(by: disposeBag)
         
-        tableView.rx.itemSelected.subscribe { [weak self] (indexPath) in
+        tableView.rx.itemSelected.subscribe { [weak self] indexPath in
             guard let self = self, let indexPath = indexPath.element else { return }
             self.viewModel.didSelectItemAtIndexPath(indexPath)
             
-            
         }.disposed(by: disposeBag)
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 160
     }
     
-    @objc func handleFavouriteButton(sender: UIButton){
-        self.viewModel.handleFavouriteButton(index: sender.tag)
-        
+    @objc func handleFavouriteButton(sender: UIButton) {
+        viewModel.handleFavouriteButton(index: sender.tag)
     }
-    
 }

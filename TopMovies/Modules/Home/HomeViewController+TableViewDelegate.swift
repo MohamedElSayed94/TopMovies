@@ -7,15 +7,12 @@
 //
 
 import Foundation
-import UIKit
-import RxSwift
-import RxCocoa
 import Kingfisher
-extension HomeViewController: UITableViewDelegate{
-    
-    
-    func setupPopularTableViewDelegate(){
-        
+import RxCocoa
+import RxSwift
+import UIKit
+extension HomeViewController: UITableViewDelegate {
+    func setupPopularTableViewDelegate() {
         popularTableView.estimatedRowHeight = popularTableView.frame.size.height / 3
         popularTableView.registerCellNib(cellClass: PopularTableViewCell.self)
         popularTableView.rx.setDelegate(self).disposed(by: disposeBag)
@@ -33,7 +30,7 @@ extension HomeViewController: UITableViewDelegate{
                 }
             }
         }.disposed(by: disposeBag)
-        popularTableView.rx.itemSelected.subscribe { [weak self] (indexPath) in
+        popularTableView.rx.itemSelected.subscribe { [weak self] indexPath in
             guard let self = self, let indexPath = indexPath.element else { return }
             self.viewModel.didSelectItemAtIndexPath(indexPath)
         }.disposed(by: disposeBag)
@@ -42,5 +39,4 @@ extension HomeViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 160
     }
-    
 }
